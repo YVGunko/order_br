@@ -10,8 +10,8 @@
 		<relativePath/>
 	</parent>
 
-	<groupId>com.greglturnquist</groupId>
-	<artifactId>react-and-spring-data-rest</artifactId>
+	<groupId>com.yg</groupId>
+	<artifactId>order_br</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 

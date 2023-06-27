@@ -5,8 +5,8 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.greglturnquist</groupId>
-		<artifactId>react-and-spring-data-rest</artifactId>
+		<groupId>com.yg</groupId>
+		<artifactId>order_br</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	
@@ -39,8 +39,8 @@
 			<artifactId>spring-boot-devtools</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
