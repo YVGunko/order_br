@@ -1,5 +1,35 @@
 package com.yg.stpls.model.user;
 
+import java.util.Collection;
+import java.util.Date;
+import java.util.Objects;
+import java.util.Set;
+
+import javax.persistence.Access;
+import javax.persistence.AccessType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.Transient;
+import javax.persistence.Version;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.NaturalIdCache;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 @NaturalIdCache
@@ -12,6 +42,49 @@ public class User implements UserDetails {
 	 */
 	private static final long serialVersionUID = -5113923763634991903L;
 
+	@Access(AccessType.PROPERTY)
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Long id;
+	
+	@NotNull
+	@NaturalId //Cache
+	private String name;
+	
+	@NotNull
+	@Column(name = "pswd", columnDefinition="default '0a1s2d3f'")
+	private @JsonIgnore String pswd;
+	
+	@Column(name = "super_user", columnDefinition="bit default 0")
+	private @JsonIgnore Boolean superUser;
+	
+	@Column(name = "external", columnDefinition="bit default 1")
+	private Boolean external;
+	
+	@Column(name = "employee_id", columnDefinition="BIGINT(20) default '0'")
+	private Long employee_id;
+	
+	@JsonFormat(pattern="dd.MM.yyyy HH:mm:ss",timezone="Europe/Moscow")
+	@Column(name = "dt", columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+	private Date dt ;
+	
+	private @Version @JsonIgnore Long version;
+
+	public Boolean getExternal() {
+		return external;
+	}
+
+	public void setExternal(Boolean external) {
+		this.external = external;
+	}
+	@Size(min=5, message = "Не меньше 5 знаков")
+	private String password;
+    @Transient
+    private String passwordConfirm;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<Role> roles;
+    
 	public Long getId() {
 		return id;
 	}
@@ -44,12 +117,12 @@ public class User implements UserDetails {
 		this.superUser = superUser;
 	}
 
-	public Employee getEmployee() {
-		return employee;
+	public Long getEmployee_id() {
+		return employee_id;
 	}
 
-	public void setEmployee(Employee employee) {
-		this.employee = employee;
+	public void setEmployee_id(Long employee_id) {
+		this.employee_id = employee_id;
 	}
 
 	public Date getDt() {
@@ -60,20 +133,15 @@ public class User implements UserDetails {
 		super();
 	}
 	
-    @Override
-    public String toString() {
-        return "User{" + "id=" + id + ", name=" + name + ", superUser=" + superUser + '}';
-    }
-	
-	public User(Long id, String name, String pswd, Boolean superUser, Employee employee, Date dt, Boolean external) {
+	public User(Long id, String name, String pswd, Boolean superUser, Boolean external) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.pswd = pswd;
 		this.superUser = superUser;
 		this.external = external;
-		this.employee = employee;
-		this.dt = dt;
+		this.employee_id = 0L;
+		this.dt = new Date();
 	}
 	public User(Long id) {
 		super();
@@ -82,58 +150,11 @@ public class User implements UserDetails {
 		this.pswd = "";
 		this.superUser = false;
 		this.external = false;
-		this.employee = null;
+		this.employee_id = 0L;
 		this.dt = new Date();
 	}
 
-	@Access(AccessType.PROPERTY)
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@JsonProperty("_id")
-	public Long id;
-	
-	@JsonProperty("name")
-	@NotNull
-	@NaturalId //Cache
-	private String name;
-	
-	@JsonProperty("pswd")
-	@NotNull
-	@ColumnDefault("1234")
-	private String pswd;
-	
-	@JsonProperty("superUser")
-	@ColumnDefault("false")
-	Boolean superUser;
-	
-	@JsonProperty("external")
-	@ColumnDefault("false")
-	Boolean external;
-	
-	@JsonProperty("Id_s")
-	@ManyToOne(fetch = FetchType.EAGER)
-	@ColumnDefault("0")
-	public Employee employee;
-	
-	@JsonProperty("DT")
-	@JsonFormat(pattern="dd.MM.yyyy HH:mm:ss",timezone="Europe/Moscow")
-	@Column(name = "dt", columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-	Date dt = new Date();
 
-	public Boolean getExternal() {
-		return external;
-	}
-
-	public void setExternal(Boolean external) {
-		this.external = external;
-	}
-	@Size(min=5, message = "Не меньше 5 знаков")
-	private String password;
-    @Transient
-    private String passwordConfirm;
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    private Set<Role> roles;
     
     public String getPassword() {
         return password;
@@ -189,19 +210,35 @@ public class User implements UserDetails {
 		return true;
 	}
 	
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private Set<PriceUser> priceUsers = new HashSet<>();
-	/*
-	@Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(name, user.name);
-    }
- 
     @Override
-    public int hashCode() {
-        return Objects.hash(name);
-    }*/
+    public String toString() {
+        return "User{" + "id=" + id + '\'' +
+        		", name=" + name + '\'' +
+        		", pswd=" + pswd + '\'' +
+        		", superUser=" + superUser +
+        		", dt=" + dt +
+        		", external=" + external +
+        		", employee_id=" + employee_id +
+        		", version=" + version +
+        		'}';
+    }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		User client = (User) o;
+		return Objects.equals(id, client.id) &&
+			Objects.equals(name, client.name) &&
+			Objects.equals(pswd, client.pswd) &&
+			Objects.equals(superUser, client.superUser) &&
+			Objects.equals(dt, client.dt) &&
+			Objects.equals(external, client.external) &&
+			Objects.equals(employee_id, client.employee_id) &&
+			Objects.equals(version, client.version);
+	}
+	@Override
+	public int hashCode() {
+
+		return Objects.hash(id, name, pswd, superUser, dt, external, employee_id, version);
+	}
 }
