@@ -20,6 +20,12 @@ public class Customer {
     public Customer() {
 		super();
 	}
+	public Customer(String id) {
+		super();
+		this.id = id;
+		this.name = "";
+		this.dt = new Date();
+	}
 	public Customer(String id, String name) {
 		super();
 		this.id = id;
