@@ -41,7 +41,7 @@ public class OutDoorOrderRow {
 	    encoded = encoded.replace("*", "");
 	    encoded = encoded.replace("+", "");
 	    encoded = encoded.replace(",", "");
-	    encoded = encoded.replace("/", "");
+	    encoded = encoded.replace("/", "-");
 	    encoded = encoded.replace(":", "");
 	    encoded = encoded.replace(";", "");
 	    encoded = encoded.replace("=", "");
@@ -93,7 +93,7 @@ public class OutDoorOrderRow {
 		else
 			this.shpalt = new Color("0","");
 		
-		if (StringUtils.isNotBlank(attribute))	this.attribute = attribute;
+		if (StringUtils.isNotBlank(attribute))	this.attribute = replaceReservedCharacters(attribute);
 	}
 	public OutDoorOrderRow (@NotNull String product_name, @NotNull String product_id,
 			String color_id, String color_name, 
@@ -113,9 +113,9 @@ public class OutDoorOrderRow {
 		if (StringUtils.isNumeric(shpalt_id) & StringUtils.isNotBlank(shpalt_name))
 			this.shpalt = new Color(shpalt_id,shpalt_name);
 		else
-			this.shpalt = new Color("0","");
+			this.shpalt = new Color("0");
 		
-		if (StringUtils.isNotBlank(attribute))	this.attribute = attribute;
+		if (StringUtils.isNotBlank(attribute))	this.attribute = replaceReservedCharacters(attribute);
 		if (StringUtils.isNotBlank(size))	this.size = size;
 	}
 	public OutDoorOrderRow (@NotNull String product_name, @NotNull String product_id,
@@ -131,7 +131,7 @@ public class OutDoorOrderRow {
 		this.liner = new Color(liner_id,liner_name);
 		this.rant = new Color(rant_id,rant_name);
 		
-		if (StringUtils.isNotBlank(attribute))	this.attribute = attribute;
+		if (StringUtils.isNotBlank(attribute))	this.attribute = replaceReservedCharacters(attribute);
 	}
 	public OutDoorOrderRow(@NotNull String id, @NotNull OutDoorOrder outDoorOrder, String attribute,
 			Integer number, String barcode, Product product, String size, Color color, Color liner, Color rant,
@@ -141,7 +141,7 @@ public class OutDoorOrderRow {
 		super();
 		this.id = id;
 		this.outDoorOrder = outDoorOrder;
-		this.attribute = attribute;
+		this.attribute = replaceReservedCharacters(attribute);
 		this.number = number;
 		this.barcode = barcode;
 		this.product = product;
@@ -172,113 +172,107 @@ public class OutDoorOrderRow {
 	@Access(AccessType.PROPERTY)
 	@Id
 	@NotNull
-	@JsonProperty("id")
-	public String id;
+	private String id;
 	
-	@JsonProperty("order_id")
 	@NotNull
 	@ManyToOne(optional = false)
-	public OutDoorOrder outDoorOrder;
+	private OutDoorOrder outDoorOrder;
 
-	@JsonProperty("attribute")
-	public String attribute;	
-	@JsonProperty("number")
-	public Integer number;	
-	@JsonProperty("barcode")
-	public String barcode;
+	private String attribute;	
+	private Integer number;	
+	private String barcode;
 	
-	@JsonProperty("product_id")
 	@ManyToOne(optional = false)
-	public Product product ;
+	private Product product ;
 	@JsonProperty("size")
 	@ColumnDefault("0")
-	public String size ;
+	private String size ;
 	@JsonProperty("color_id")
 	@ManyToOne(optional = false)
 	@ColumnDefault("0")
-	public Color color ;
+	private Color color ;
 	@JsonProperty("liner_id")
 	@ManyToOne(optional = false)
 	@ColumnDefault("0")
-	public Color liner ;
+	private Color liner ;
 	@JsonProperty("rant_id")
 	@ManyToOne(optional = false)
 	@ColumnDefault("0")
-	public Color rant ;
+	private Color rant ;
 	@JsonProperty("shpalt_id")
 	@ManyToOne(optional = false)
 	@ColumnDefault("0")
-	public Color shpalt ;
+	private Color shpalt ;
 	//***Атрибут
 		@JsonProperty("vstavka")
 		@ManyToOne(optional = false)
 		@ColumnDefault("0")
-		public Color vstavka ;
+		private Color vstavka ;
 		
 		@JsonProperty("gelenok")
 		@ManyToOne(optional = false)
 		@ColumnDefault("0")
-		public Color gelenok ;
+		private Color gelenok ;
 		
 		@JsonProperty("guba")
 		@ManyToOne(optional = false)
 		@ColumnDefault("0")
-		public Color guba ;
+		private Color guba ;
 		
 		@JsonProperty("kabluk")
 		@ManyToOne(optional = false)
 		@ColumnDefault("0")
-		public Color kabluk ;
+		private Color kabluk ;
 		
 		@JsonProperty("matirovka")
 		@ManyToOne(optional = false)
 		@ColumnDefault("0")
-		public Color matirovka ;
+		private Color matirovka ;
 		
 		@JsonProperty("pechat")
 		@ManyToOne(optional = false)
 		@ColumnDefault("0")
-		public Color pechat ;
+		private Color pechat ;
 		
 		@JsonProperty("proshiv")
 		@ManyToOne(optional = false)
 		@ColumnDefault("0")
-		public Color proshiv ;
+		private Color proshiv ;
 		
 		@JsonProperty("pyatka")
 		@ManyToOne(optional = false)
-		public Color pyatka ;
+		private Color pyatka ;
 		
 		@JsonProperty("sled")
 		@ManyToOne(optional = false)
-		public Color sled ;
+		private Color sled ;
 		
 		@JsonProperty("spoyler")
 		@ManyToOne(optional = false)
-		public Color spoyler ;
+		private Color spoyler ;
 		
 		@JsonProperty("ashpalt")
 		@ManyToOne(optional = false)
-		public Color ashpalt ;
+		private Color ashpalt ;
 		
 		@JsonProperty("prodir")
-		public Boolean prodir=false;
+		private Boolean prodir=false;
 		@JsonProperty("difersize")
-		public Boolean difersize=false;
+		private Boolean difersize=false;
 		@JsonProperty("tert")
-		public Boolean tert=false;
+		private Boolean tert=false;
 		@JsonProperty("frez")
-		public Boolean frez=false;
+		private Boolean frez=false;
 		@JsonProperty("sample")
-		public Boolean sample=false;
+		private Boolean sample=false;
 
 		@JsonFormat(pattern="dd.MM.yyyy HH:mm:ss",timezone="Europe/Moscow")
 		@Column(name = "dt", columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-		public Date dt = new Date();
+		private Date dt = new Date();
 
 		@JsonProperty("plastizol")
 		@ManyToOne(optional = false)
-		public Color plastizol ;
+		private Color plastizol ;
 		
 	public OutDoorOrderRow(String id, @NotNull OutDoorOrder outDoorOrder, 
 			String attribute, Integer number, String barcode,
@@ -291,28 +285,28 @@ public class OutDoorOrderRow {
 		this.id = id;
 		this.outDoorOrder = outDoorOrder;
 
-		this.attribute = attribute;
+		this.attribute = replaceReservedCharacters(attribute);
 		this.number = number;
 		this.barcode = barcode;
 		this.product = new Product(product_id,"","");
 		this.size = size;
-		this.color = new Color(color_id,"");
-		this.liner = new Color(liner_id,"");
-		this.rant = new Color(rant_id,"");
-		this.shpalt = new Color(shpalt_id,"");
-		this.vstavka = new Color(vstavka_id,"");
-		this.gelenok = new Color(gelenok_id,"");
-		this.guba = new Color(guba_id,"");
-		this.kabluk = new Color(kabluk_id,"");
-		this.matirovka = new Color(matirovka_id,"");
+		this.color = new Color(color_id);
+		this.liner = new Color(liner_id);
+		this.rant = new Color(rant_id);
+		this.shpalt = new Color(shpalt_id);
+		this.vstavka = new Color(vstavka_id);
+		this.gelenok = new Color(gelenok_id);
+		this.guba = new Color(guba_id);
+		this.kabluk = new Color(kabluk_id);
+		this.matirovka = new Color(matirovka_id);
 
-		this.pechat = new Color(pechat_id,"");
-		this.proshiv = new Color(proshiv_id,"");
-		this.pyatka = new Color(pyatka_id,"");
-		this.sled = new Color(sled_id,"");
-		this.spoyler = new Color(spoyler_id,"");
-		this.ashpalt = new Color(ashpalt_id,"");
-		this.plastizol = new Color(plastizol_id,"");
+		this.pechat = new Color(pechat_id);
+		this.proshiv = new Color(proshiv_id);
+		this.pyatka = new Color(pyatka_id);
+		this.sled = new Color(sled_id);
+		this.spoyler = new Color(spoyler_id);
+		this.ashpalt = new Color(ashpalt_id);
+		this.plastizol = new Color(plastizol_id);
 		this.prodir = prodir;
 		this.difersize = difersize;
 		this.tert = tert;

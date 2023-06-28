@@ -27,7 +27,7 @@ public class CustomerController {
 	
   @Autowired
   CustomerRepository customerRepository;
-	  
+/*	  
 @GetMapping("/customers")
 public ResponseEntity<Map<String, Object>> getAllTutorials(
 	        @RequestParam(required = false) String title,
@@ -57,7 +57,7 @@ public ResponseEntity<Map<String, Object>> getAllTutorials(
 	    } catch (Exception e) {
 	      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 	    }
-	}
+	}*/
 /*
 @GetMapping("/customers/{id}")
 public ResponseEntity<Customer> getCustomerById(@PathVariable("id") String id) {

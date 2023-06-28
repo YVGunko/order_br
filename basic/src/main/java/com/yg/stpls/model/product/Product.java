@@ -8,7 +8,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.yg.stpls.model.division.Division;
 
 
@@ -40,6 +39,13 @@ public class Product {
 		this.division = division;
 	}
 
+	public Product(String id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.division = new Division ("0");
+	}
+	
 	public Product(String id, String name, String division_code) {
 		super();
 		this.id = id;
@@ -58,16 +64,7 @@ public class Product {
 		this.division = division;
 	}
 
-	@Id
-	@NotNull
-	@JsonProperty("id")
-	public String id;
-	
-	@JsonProperty("name")
-	@NotNull
-	public String name;
-	
-	@NotNull
-	@ManyToOne(optional = false)
-	public Division division ;
+	@Id	@NotNull private String id;
+	@NotNull	private String name;
+	@NotNull @ManyToOne(optional = false) private Division division ;
 }

@@ -14,3 +14,8 @@ package-lock.json
 .project
 org.eclipse.*
 settings.json
+.DS_Store
+basic/.DS_Store
+basic/src/.DS_Store
+basic/src/main/.DS_Store
+basic/src/main/js/.DS_Store

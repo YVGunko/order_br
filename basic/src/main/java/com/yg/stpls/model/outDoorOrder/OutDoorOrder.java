@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -23,17 +24,17 @@ public class OutDoorOrder {
 	
 	@NotNull
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
-	@Column(name = "client_id", columnDefinition="VARCHAR(255) default '0'")
+	@JoinColumn(name = "client_id", columnDefinition="VARCHAR(255) default '0'")
 	private Customer client ;
 	
 	@NotNull
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
-	@Column(name = "division_code", columnDefinition="VARCHAR(255) default '0'")
+	@JoinColumn(name = "division_code", columnDefinition="VARCHAR(255) default '0'")
 	private Division division ;
 	
 	@NotNull
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
-	@Column(name = "user_id", columnDefinition="BIGINT(20) default '0'")
+	@JoinColumn(name = "user_id", columnDefinition="BIGINT(20) default '0'")
 	private User user ;
 	
 	@JsonFormat(pattern="dd.MM.yyyy HH:mm:ss",timezone="Europe/Moscow")

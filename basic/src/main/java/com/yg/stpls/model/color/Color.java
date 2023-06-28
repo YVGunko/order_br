@@ -10,12 +10,11 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.yg.stpls.model.division.Division;
 
 
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-@Table(indexes= {@Index(name = "indexByNameAndDivision", columnList="name,division_code", unique = true),
+@Table(name = "color", indexes= {@Index(name = "indexByNameAndDivision", columnList="name,division_code", unique = true),
 		@Index(name = "indexByNameAndDivisionAndOccurrance", columnList="name,division_code,occurrence", unique = true)})
 @Entity
 public class Color {
@@ -43,11 +42,17 @@ public class Color {
 		this.division = division;
 	}
 	
+	public Color(String id) {
+		super();
+		this.id = id;
+		this.name = "";
+		this.division = new Division ("0");
+	}
 	public Color(String id, String name) {
 		super();
 		this.id = id;
 		this.name = name;
-		this.division = new Division ("0","...");
+		this.division = new Division ("0");
 	}
 	
 	public Color(String id, String name, String division_code, String occurrence) {
@@ -55,7 +60,7 @@ public class Color {
 		this.id = id;
 		this.name = name;
 		this.occurrence = occurrence;
-		this.division = new Division (division_code,"");
+		this.division = new Division (division_code);
 	}
 	
 	public Color(String id, String name, Division division, String occurrence) {
@@ -70,20 +75,13 @@ public class Color {
 		super();
 	}
 
-	@Id
-	@NotNull
-	@JsonProperty("id")
-	public String id;
-	
-	@JsonProperty("name")
-	@NotNull
-	public String name;
-	
-	@JsonProperty("occurrence")
-	public String occurrence;
+	@Id @NotNull private String id;
+	@NotNull private String name;
+
+	private String occurrence;
 
 	@ManyToOne(optional = false)
-	public Division division ;
+	private Division division ;
 
 	public String getOccurrence() {
 		return occurrence;

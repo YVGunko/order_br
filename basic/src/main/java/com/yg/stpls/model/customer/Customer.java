@@ -6,9 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Version;
-
-import org.springframework.lang.NonNull;
-
+import javax.validation.constraints.NotNull;
 import javax.persistence.Column;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -42,17 +40,13 @@ public class Customer {
 		this.id1c = id1c;
 	}
 	
-	@Id
-	@NonNull
-	private String id;
+	@NotNull @Id private String id;
 
-	@Column(name = "name")
-	@NonNull
-	private String name;
+	@NotNull @Column(name = "name") private String name;
 
 	@JsonFormat(pattern="dd.MM.yyyy HH:mm:ss",timezone="Europe/Moscow")
 	@Column(name = "dt", columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-	private Date dt = new Date();
+	private Date dt ;
 	
 	@Column(name = "email")
 	private String email;
